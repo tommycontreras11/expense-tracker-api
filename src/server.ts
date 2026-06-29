@@ -1,8 +1,9 @@
-import app from "./app.js"
+import app from "./app"
+import config from "./config/"
 
 async function bootstrap() {
     try {
-        app.listen(3000, () => console.log(`The server is running 3000`))
+        app.listen(config.PORT, () => console.log(`The server is running ${config.PORT}`))
     } catch (error) {
         console.log("Failed to start application: ", error)
     }
