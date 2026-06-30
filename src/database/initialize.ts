@@ -5,7 +5,7 @@ export const connectDatabase = async () => {
         await AppDataSource.initialize()
         console.log("✅ Connected successfully to the database")
     } catch (error) {
-        console.log("Something went wrong while trying to connect to the db: ", error)
+        console.log("❌ Something went wrong while trying to connect to the db: ", error)
         process.exit(1)
     }
 }
