@@ -1,7 +1,6 @@
 import { plainToInstance } from "class-transformer";
 import { validate } from "class-validator";
 import { NextFunction, Request, Response } from "express";
-import { StatusCode } from "../constants/status-code.js";
 import { BadRequestException } from "../exceptions/bad-request-exception.js";
 
 export function validateDto<T extends object>(DtoClass: new () => T) {
