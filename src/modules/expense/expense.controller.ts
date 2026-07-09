@@ -3,7 +3,7 @@ import { expenseService } from "./expense.service.js";
 import { StatusCode } from "../../constants/status-code.js";
 
 export const createExpenseController = async (req: Request, res: Response) => {
-  const expense = await expenseService.create(req.body, req.user!.sub);
+  const expense = await expenseService.create(req.user!.sub, req.body);
 
   const data = {
     uuid: expense.uuid,
@@ -16,12 +16,19 @@ export const createExpenseController = async (req: Request, res: Response) => {
   return res.status(StatusCode.CREATED).json({ data });
 };
 
+export const updateExpenseController = async (req: Request, res: Response) => {
+  const { uuid } = req.params as { uuid: string };
+
+  const expense = await expenseService.update(uuid, req.user!.sub, req.body);
+
+  return res.status(StatusCode.OK).json({ data: expense });
+};
+
+
 export const deleteExpenseController = async (req: Request, res: Response) => {
   const { uuid } = req.params as { uuid: string };
 
-  console.log("HOLA")
-
-  const expense = await expenseService.delete(uuid, req.user!.sub);
+  const expense = await expenseService.delete(req.user!.sub, uuid);
 
   return res.status(StatusCode.OK).json({ data: expense });
 };

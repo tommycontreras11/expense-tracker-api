@@ -2,7 +2,7 @@ import { ExpenseEntity } from "../../database/entities/expense.entity.js";
 import { NotFoundException } from "../../exceptions/not-found.exception.js";
 import { expenseRepository } from "../../repositories/expense.repository.js";
 import { userRepository } from "../../repositories/user.repository.js";
-import { CreateExpenseDTO } from "./expense.dto.js";
+import { CreateExpenseDTO, UpdateExpenseDTO } from "./expense.dto.js";
 
 const getUserExpenseOrThrow = async (
   expenseUuid: string,
@@ -22,7 +22,7 @@ const getUserExpenseOrThrow = async (
 
 
 export const expenseService = {
-  async create(payload: CreateExpenseDTO, userUuid: string) {
+  async create(userUuid: string, payload: CreateExpenseDTO) {
     const user = await userRepository.findByUuid(userUuid);
 
     if (!user) {
@@ -30,6 +30,14 @@ export const expenseService = {
     }
 
     return await expenseRepository.create(payload, user);
+  },
+
+  async update(uuid: string, userUuid: string, payload: UpdateExpenseDTO) {
+    await getUserExpenseOrThrow(uuid, userUuid);
+
+    await expenseRepository.update(uuid, payload);
+
+    return { message: "Expense updated successfully" }
   },
 
   async delete(uuid: string, userUuid: string) {

@@ -1,7 +1,7 @@
 import AppDataSource from "../database/data-source.js";
 import { ExpenseEntity } from "../database/entities/expense.entity.js";
 import { UserEntity } from "../database/entities/user.entity.js";
-import { CreateExpenseDTO } from "../modules/expense/expense.dto.js";
+import { CreateExpenseDTO, UpdateExpenseDTO } from "../modules/expense/expense.dto.js";
 
 const entity = AppDataSource.getRepository(ExpenseEntity);
 
@@ -16,6 +16,16 @@ export const expenseRepository = {
   create({ ...payload }: CreateExpenseDTO, user: UserEntity) {
     const expense = entity.create({ ...payload, user });
     return entity.save(expense);
+  },
+
+  update(uuid: string, payload: UpdateExpenseDTO) {
+    return entity.update({ uuid }, {
+        ...(payload.title && { title: payload.title }),
+        ...(payload.description && { description: payload.description }),
+        ...(payload.amount && { amount: payload.amount }),
+        ...(payload.category && { category: payload.category }),
+        ...(payload.expense_date && { expense_date: payload.expense_date })
+    })
   },
 
   remove(expense: ExpenseEntity) {
