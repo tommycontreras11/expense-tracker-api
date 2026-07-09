@@ -15,3 +15,13 @@ export const createExpenseController = async (req: Request, res: Response) => {
 
   return res.status(StatusCode.CREATED).json({ data });
 };
+
+export const deleteExpenseController = async (req: Request, res: Response) => {
+  const { uuid } = req.params as { uuid: string };
+
+  console.log("HOLA")
+
+  const expense = await expenseService.delete(uuid, req.user!.sub);
+
+  return res.status(StatusCode.OK).json({ data: expense });
+};

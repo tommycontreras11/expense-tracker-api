@@ -16,5 +16,9 @@ export const expenseRepository = {
   create({ ...payload }: CreateExpenseDTO, user: UserEntity) {
     const expense = entity.create({ ...payload, user });
     return entity.save(expense);
+  },
+
+  remove(expense: ExpenseEntity) {
+    return entity.softRemove(expense)
   }
 };
