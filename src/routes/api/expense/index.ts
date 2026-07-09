@@ -4,12 +4,14 @@ import { CreateExpenseDTO } from "../../../modules/expense/expense.dto.js";
 import {
   createExpenseController,
   deleteExpenseController,
+  getAllExpenseController,
   getOneByUuidExpenseController,
   updateExpenseController,
 } from "../../../modules/expense/expense.controller.js";
 
 const router = Router();
 
+router.get("/", getAllExpenseController);
 router.get("/:uuid", getOneByUuidExpenseController);
 router.post("/", validateDto(CreateExpenseDTO), createExpenseController);
 router.patch("/:uuid", updateExpenseController);

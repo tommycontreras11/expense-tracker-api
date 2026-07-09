@@ -10,6 +10,7 @@ import {
 } from "class-validator";
 import { ExpenseCategoryEnum } from "../../enums/expense-category.enum.js";
 import { Type } from "class-transformer";
+import { ExpenseFilterEnum } from "../../enums/expense-filter.enum.js";
 
 export class CreateExpenseDTO {
   @IsNotEmpty()
@@ -61,4 +62,18 @@ export class UpdateExpenseDTO {
   @IsOptional()
   @IsDateString()
   expense_date: string;
+}
+
+export class GetExpensesQueryDTO {
+  @IsOptional()
+  @IsEnum(ExpenseFilterEnum)
+  filter?: ExpenseFilterEnum;
+
+  @IsOptional()
+  @IsDateString()
+  start?: string;
+
+  @IsOptional()
+  @IsDateString()
+  end?: string;
 }

@@ -1,6 +1,13 @@
 import { Request, Response } from "express";
 import { expenseService } from "./expense.service.js";
 import { StatusCode } from "../../constants/status-code.js";
+import { expenseMapper } from "./expense.mapper.js";
+
+export const getAllExpenseController = async (req: Request, res: Response) => {
+  const expenses = await expenseService.list(req.user!.sub, req.query);
+
+  return res.status(StatusCode.OK).json({ data: expenseMapper.toResponseList(expenses) });
+};
 
 export const getOneByUuidExpenseController = async (
   req: Request,
@@ -13,29 +20,13 @@ export const getOneByUuidExpenseController = async (
     req.user!.sub,
   );
 
-  const data = {
-    uuid: expense.uuid,
-    title: expense.title,
-    description: expense?.description,
-    amount: expense.amount,
-    category: expense.category,
-  };
-
-  return res.status(StatusCode.OK).json({ data });
+  return res.status(StatusCode.OK).json({ data: expenseMapper.toResponse(expense) });
 };
 
 export const createExpenseController = async (req: Request, res: Response) => {
   const expense = await expenseService.create(req.user!.sub, req.body);
 
-  const data = {
-    uuid: expense.uuid,
-    title: expense.title,
-    description: expense?.description,
-    amount: expense.amount,
-    category: expense.category,
-  };
-
-  return res.status(StatusCode.CREATED).json({ data });
+  return res.status(StatusCode.CREATED).json({ data: expenseMapper.toResponse(expense) });
 };
 
 export const updateExpenseController = async (req: Request, res: Response) => {

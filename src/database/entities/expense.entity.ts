@@ -34,7 +34,7 @@ export class ExpenseEntity extends BaseEntity {
   category: ExpenseCategoryEnum;
 
   @Column({ type: "date" })
-  expense_date: Date;
+  expense_date: string;
 
   @ManyToOne(() => UserEntity, (user) => user.expenses, {
     onDelete: "CASCADE",

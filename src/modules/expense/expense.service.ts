@@ -1,8 +1,15 @@
 import { ExpenseEntity } from "../../database/entities/expense.entity.js";
+import { ExpenseFilterEnum } from "../../enums/expense-filter.enum.js";
+import { BadRequestException } from "../../exceptions/bad-request-exception.js";
 import { NotFoundException } from "../../exceptions/not-found.exception.js";
 import { expenseRepository } from "../../repositories/expense.repository.js";
 import { userRepository } from "../../repositories/user.repository.js";
-import { CreateExpenseDTO, UpdateExpenseDTO } from "./expense.dto.js";
+import { formatDate } from "../../utils/date.util.js";
+import {
+  CreateExpenseDTO,
+  GetExpensesQueryDTO,
+  UpdateExpenseDTO,
+} from "./expense.dto.js";
 
 const getUserExpenseOrThrow = async (
   expenseUuid: string,
@@ -21,6 +28,62 @@ const getUserExpenseOrThrow = async (
 };
 
 export const expenseService = {
+  async list(userUuid: string, query: GetExpensesQueryDTO) {
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+
+    switch (query.filter) {
+      case ExpenseFilterEnum.PAST_WEEK: {
+        const startDate = new Date(today);
+        startDate.setDate(startDate.getDate() - 7);
+
+        return expenseRepository.findBetweenDates(
+          userUuid,
+          formatDate(startDate),
+          formatDate(today),
+        );
+      }
+
+      case ExpenseFilterEnum.PAST_MONTH: {
+        const startDate = new Date(today);
+        startDate.setMonth(startDate.getMonth() - 1);
+
+        return expenseRepository.findBetweenDates(
+          userUuid,
+          formatDate(startDate),
+          formatDate(today),
+        );
+      }
+
+      case ExpenseFilterEnum.LAST_THREE_MONTHS: {
+        const startDate = new Date(today);
+        startDate.setMonth(startDate.getMonth() - 3);
+
+        return expenseRepository.findBetweenDates(
+          userUuid,
+          formatDate(startDate),
+          formatDate(today),
+        );
+      }
+
+      case ExpenseFilterEnum.CUSTOM: {
+        if (!query.start || !query.end) {
+          throw new BadRequestException(
+            "The 'start' and 'end' dates are required.",
+          );
+        }
+
+        return expenseRepository.findBetweenDates(
+          userUuid,
+          query.start,
+          query.end,
+        );
+      }
+    }
+
+    return expenseRepository.findAll(userUuid);
+  },
+
   async getUserExpenseByUuid(uuid: string, userUuid: string) {
     return await getUserExpenseOrThrow(uuid, userUuid);
   },
