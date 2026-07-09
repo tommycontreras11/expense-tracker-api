@@ -13,3 +13,9 @@ export const signUp = async (req: Request, res: Response) => {
 
   return res.status(StatusCode.CREATED).json({ data });
 };
+
+export const signIn = async (req: Request, res: Response) => {
+  const token = await authService.signIn(req.body);
+
+  return res.status(StatusCode.OK).json({ data: { token } });
+};

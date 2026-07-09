@@ -16,3 +16,15 @@ export class SignUpDTO {
   @MaxLength(100, { message: "The max length is 255" })
   password: string;
 }
+
+export class SignInDTO {
+  @IsNotEmpty()
+  @IsEmail()
+  @MaxLength(100, { message: "The max length is 255" })
+  email: string;
+
+  @IsNotEmpty()
+  @IsString()
+  @MaxLength(100, { message: "The max length is 255" })
+  password: string;
+}
