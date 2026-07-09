@@ -14,6 +14,8 @@ const AppDataSource = new DataSource({
     username: config.DB_USER,
     password: config.DB_PASSWORD,
 
+    logging: config.NODE_ENV === "dev" ? ["query", "error"] : undefined,
+
     entities: [path.join(__dirname, "entities/*.entity.{ts, js}")],
     migrations: [path.join(__dirname, "migrations/*{ts, js}")]
 })
