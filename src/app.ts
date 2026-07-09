@@ -1,9 +1,8 @@
 import "reflect-metadata"
 
 import express from "express"
-import routes from "./routes/index.js"
 import { errorMiddleware } from "./middlewares/error.middleware.js"
-import { validateDto } from "./middlewares/validate-dto.middleware.js"
+import routes from "./routes/index.js"
 
 const app = express()
 
