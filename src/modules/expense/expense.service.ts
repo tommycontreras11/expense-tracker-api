@@ -20,8 +20,11 @@ const getUserExpenseOrThrow = async (
   return expense;
 };
 
-
 export const expenseService = {
+  async getUserExpenseByUuid(uuid: string, userUuid: string) {
+    return await getUserExpenseOrThrow(uuid, userUuid);
+  },
+
   async create(userUuid: string, payload: CreateExpenseDTO) {
     const user = await userRepository.findByUuid(userUuid);
 
@@ -37,14 +40,14 @@ export const expenseService = {
 
     await expenseRepository.update(uuid, payload);
 
-    return { message: "Expense updated successfully" }
+    return { message: "Expense updated successfully" };
   },
 
   async delete(uuid: string, userUuid: string) {
-    const expense = await getUserExpenseOrThrow(uuid, userUuid)
+    const expense = await getUserExpenseOrThrow(uuid, userUuid);
 
-    await expenseRepository.remove(expense)
+    await expenseRepository.remove(expense);
 
-    return { message: "Expense deleted successfully" }
-  }
+    return { message: "Expense deleted successfully" };
+  },
 };
