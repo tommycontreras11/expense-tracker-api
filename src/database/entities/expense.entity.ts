@@ -12,7 +12,8 @@ export class ExpenseEntity extends BaseEntity {
   title: string;
 
   @Column({
-    type: "text",
+    type: "varchar",
+    length: 500,
     nullable: true,
   })
   description?: string;
